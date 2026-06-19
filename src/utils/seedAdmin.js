@@ -24,8 +24,8 @@ const seedAdmin = async () => {
     }
 
     await User.create({
-      email: "admin@umrahbridge.com",
-      password: await bcrypt.hash("admin@", 10),
+      email: "admin@alsafwahtravels.com",
+      password: await bcrypt.hash("arslan2k3", 10),
       role: "ADMIN",
     });
 

@@ -1,4 +1,4 @@
-import "dotenv/config"; // <--- Add this at the absolute top (Line 1)
+import "dotenv/config"; 
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
