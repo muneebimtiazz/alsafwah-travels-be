@@ -27,7 +27,7 @@ export const sendAdminInquiryEmail = async (inquiry) => {
           <h1 style="color: #C9A84C; margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">
             New Lead Received
           </h1>
-          <p style="color: #8ab5a0; margin: 8px 0 0 0; font-size: 13px;">Umrah Bridge Admin Portal</p>
+          <p style="color: #8ab5a0; margin: 8px 0 0 0; font-size: 13px;">Al Safwah Travels Admin Portal</p>
         </div>
 
         <!-- Body -->
@@ -88,7 +88,7 @@ export const sendAdminInquiryEmail = async (inquiry) => {
           </table>
 
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center;">
-            <a href="https://yourdomain.com/admin/inquiries" style="display: inline-block; background-color: #C9A84C; color: #051A14; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+            <a href="https://alsafwahgroup.co.uk/admin/inquiries" style="display: inline-block; background-color: #C9A84C; color: #051A14; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
               View in Admin Dashboard
             </a>
           </div>
@@ -130,7 +130,7 @@ export const sendCustomerConfirmationEmail = async (inquiry) => {
         <!-- Header -->
         <div style="background-color: #051A14; padding: 40px 24px; text-align: center; border-bottom: 4px solid #C9A84C;">
           <h1 style="color: #C9A84C; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">
-            Umrah Bridge
+            Alsafwah Travels
           </h1>
           <p style="color: #8ab5a0; margin: 8px 0 0 0; font-size: 13px; letter-spacing: 1px;">Sacred Journeys, Perfected.</p>
         </div>
@@ -173,7 +173,7 @@ export const sendCustomerConfirmationEmail = async (inquiry) => {
         <div style="background-color: #051A14; padding: 30px; text-align: center;">
           <p style="color: #8ab5a0; font-size: 12px; margin: 0 0 10px 0; line-height: 1.5;">
             <strong>Umrah Bridge Headquarters</strong><br>
-            13 Station Rd, London SE25 5AH, UK<br>
+            Flat 6, Din Buildings, Harehills Lane, Leeds, United Kingdom, LS8 3EG, UK<br>
             Direct: +44 7445 274723
           </p>
           <p style="color: #4b6659; font-size: 11px; margin: 0;">
