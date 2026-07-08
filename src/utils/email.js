@@ -1,7 +1,6 @@
-import { resend } from "../config/resend.config.js";
+import { RESEND_API_URL, RESEND_HEADERS, EMAIL_CONFIG } from "../config/resend.config.js";
 
-const FROM = process.env.EMAIL_FROM;
-const ADMIN = process.env.EMAIL_TO;
+const ADMIN = process.env.EMAIL_TO; // Ensure EMAIL_TO is in your .env for the admin destination
 
 // ── Admin notification email ────────────────────────────────────────────────
 export const sendAdminInquiryEmail = async (inquiry) => {
@@ -22,21 +21,18 @@ export const sendAdminInquiryEmail = async (inquiry) => {
     <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f4f5f5; padding: 20px;">
       <div style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         
-        <!-- Header -->
         <div style="background-color: #051A14; padding: 35px 24px; text-align: center; border-bottom: 4px solid #C9A84C;">
           <h1 style="color: #C9A84C; margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">
             New Lead Received
           </h1>
-          <p style="color: #8ab5a0; margin: 8px 0 0 0; font-size: 13px;">Al Safwah Travels Admin Portal</p>
+          <p style="color: #8ab5a0; margin: 8px 0 0 0; font-size: 13px;">${EMAIL_CONFIG.companyName} Admin Portal</p>
         </div>
 
-        <!-- Body -->
         <div style="padding: 30px 24px;">
           <p style="color: #374151; font-size: 15px; margin-top: 0; margin-bottom: 25px;">
             A new inquiry has just been submitted via the website. Please review the details below.
           </p>
 
-          <!-- Data Table -->
           <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
             <tr>
               <td style="padding: 14px 0; border-bottom: 1px solid #f3f4f6; color: #6b7280; width: 130px; font-weight: 600;">Package</td>
@@ -88,16 +84,15 @@ export const sendAdminInquiryEmail = async (inquiry) => {
           </table>
 
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center;">
-            <a href="https://alsafwahgroup.co.uk/admin/inquiries" style="display: inline-block; background-color: #C9A84C; color: #051A14; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+            <a href="${EMAIL_CONFIG.clientUrl}/admin/inquiries" style="display: inline-block; background-color: #C9A84C; color: #051A14; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 6px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
               View in Admin Dashboard
             </a>
           </div>
         </div>
 
-        <!-- Footer -->
         <div style="background-color: #f9fafb; padding: 15px; text-align: center; border-top: 1px solid #e5e7eb;">
           <p style="color: #9ca3af; font-size: 11px; margin: 0;">
-            Received on ${dateStr} • Umrah Bridge Internal Automated System
+            Received on ${dateStr} • ${EMAIL_CONFIG.companyName} Internal Automated System
           </p>
         </div>
 
@@ -105,15 +100,24 @@ export const sendAdminInquiryEmail = async (inquiry) => {
     </div>
   `;
 
-  const { error } = await resend.emails.send({
-    from: FROM,
-    to: ADMIN,
-    subject: `New Lead: ${fullName} — ${journeyType || "Inquiry"}`,
-    html,
-  });
+  try {
+    const response = await fetch(RESEND_API_URL, {
+      method: "POST",
+      headers: RESEND_HEADERS,
+      body: JSON.stringify({
+        from: EMAIL_CONFIG.from,
+        to: ADMIN,
+        subject: `New Lead: ${fullName} — ${journeyType || "Inquiry"}`,
+        html,
+      }),
+    });
 
-  if (error) {
-    console.error("Admin Email Error:", error);
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Admin Email Error:", errorData);
+    }
+  } catch (error) {
+    console.error("Admin Email Request Failed:", error);
   }
 };
 
@@ -127,23 +131,20 @@ export const sendCustomerConfirmationEmail = async (inquiry) => {
     <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f4f5f5; padding: 20px;">
       <div style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         
-        <!-- Header -->
         <div style="background-color: #051A14; padding: 40px 24px; text-align: center; border-bottom: 4px solid #C9A84C;">
           <h1 style="color: #C9A84C; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">
-            Alsafwah Travels
+            ${EMAIL_CONFIG.companyName}
           </h1>
           <p style="color: #8ab5a0; margin: 8px 0 0 0; font-size: 13px; letter-spacing: 1px;">Sacred Journeys, Perfected.</p>
         </div>
 
-        <!-- Body -->
         <div style="padding: 40px 30px;">
           <h2 style="color: #111827; font-size: 20px; margin-top: 0;">As-salamu alaykum, ${fullName.split(' ')[0]}</h2>
           
           <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin-bottom: 25px;">
-            Thank you for reaching out to Umrah Bridge. We have successfully received your inquiry and are honored that you are considering us to facilitate your spiritual journey.
+            Thank you for reaching out to ${EMAIL_CONFIG.companyName}. We have successfully received your inquiry and are honored that you are considering us to facilitate your spiritual journey.
           </p>
 
-          <!-- Itinerary Summary Box -->
           <div style="background-color: #fdfbf7; border: 1px solid #f3ead3; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
             <p style="margin: 0 0 10px 0; font-size: 12px; color: #C9A84C; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Inquiry Details</p>
             <p style="margin: 0 0 8px 0; color: #111827; font-size: 15px;">
@@ -169,15 +170,15 @@ export const sendCustomerConfirmationEmail = async (inquiry) => {
           </div>
         </div>
 
-        <!-- Footer -->
         <div style="background-color: #051A14; padding: 30px; text-align: center;">
           <p style="color: #8ab5a0; font-size: 12px; margin: 0 0 10px 0; line-height: 1.5;">
-            <strong>Umrah Bridge Headquarters</strong><br>
+            <strong>${EMAIL_CONFIG.companyName} Headquarters</strong><br>
             Flat 6, Din Buildings, Harehills Lane, Leeds, United Kingdom, LS8 3EG, UK<br>
-            Direct: +44 7445 274723
+            Direct: +44 7445 274723<br>
+            Email: ${EMAIL_CONFIG.supportEmail}
           </p>
           <p style="color: #4b6659; font-size: 11px; margin: 0;">
-            © ${new Date().getFullYear()} Umrah Bridge. All rights reserved.
+            © ${EMAIL_CONFIG.year} ${EMAIL_CONFIG.companyName}. All rights reserved.
           </p>
         </div>
 
@@ -185,14 +186,23 @@ export const sendCustomerConfirmationEmail = async (inquiry) => {
     </div>
   `;
 
-  const { error } = await resend.emails.send({
-    from: FROM,
-    to: inquiry.email,
-    subject: "Inquiry Received — Umrah Bridge",
-    html,
-  });
+  try {
+    const response = await fetch(RESEND_API_URL, {
+      method: "POST",
+      headers: RESEND_HEADERS,
+      body: JSON.stringify({
+        from: EMAIL_CONFIG.from,
+        to: inquiry.email,
+        subject: `Inquiry Received — ${EMAIL_CONFIG.companyName}`,
+        html,
+      }),
+    });
 
-  if (error) {
-    console.error("Customer Email Error:", error);
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Customer Email Error:", errorData);
+    }
+  } catch (error) {
+    console.error("Customer Email Request Failed:", error);
   }
 };
